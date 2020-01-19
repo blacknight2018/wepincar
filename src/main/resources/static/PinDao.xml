@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pin.chen.dao.mapper.PinDao">
+  <resultMap id="BaseResultMap" type="com.pin.chen.dao.pojo.Pin">
+    <id column="pinid" jdbcType="INTEGER" property="pinid" />
+    <result column="reqnum" jdbcType="INTEGER" property="reqnum" />
+    <result column="passenger" jdbcType="VARCHAR" property="passenger" />
+    <result column="stoptime" jdbcType="TIMESTAMP" property="stoptime" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="price" jdbcType="INTEGER" property="price" />
+    <result column="carnumber" jdbcType="VARCHAR" property="carnumber" />
+    <result column="cancel" jdbcType="BIT" property="cancel" />
+    <result column="sender_openid" jdbcType="VARCHAR" property="senderOpenid" />
+    <result column="driver_openid" jdbcType="VARCHAR" property="driverOpenid" />
+    <result column="fromcity" jdbcType="VARCHAR" property="fromcity" />
+    <result column="tocity" jdbcType="VARCHAR" property="tocity" />
+    <result column="sender_mobile" jdbcType="VARCHAR" property="senderMobile" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pinid, reqnum, passenger, stoptime, createtime, price, carnumber, cancel, sender_openid, 
+    driver_openid, fromcity, tocity, sender_mobile
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pin
+    where pinid = #{pinid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from pin
+    where pinid = #{pinid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="pinid" keyProperty="pinid" parameterType="com.pin.chen.dao.pojo.Pin" useGeneratedKeys="true">
+    insert into pin (reqnum, passenger, stoptime, 
+      createtime, price, carnumber, 
+      cancel, sender_openid, driver_openid, 
+      fromcity, tocity, sender_mobile
+      )
+    values (#{reqnum,jdbcType=INTEGER}, #{passenger,jdbcType=VARCHAR}, #{stoptime,jdbcType=TIMESTAMP}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{price,jdbcType=INTEGER}, #{carnumber,jdbcType=VARCHAR}, 
+      #{cancel,jdbcType=BIT}, #{senderOpenid,jdbcType=VARCHAR}, #{driverOpenid,jdbcType=VARCHAR}, 
+      #{fromcity,jdbcType=VARCHAR}, #{tocity,jdbcType=VARCHAR}, #{senderMobile,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="pinid" keyProperty="pinid" parameterType="com.pin.chen.dao.pojo.Pin" useGeneratedKeys="true">
+    insert into pin
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="reqnum != null">
+        reqnum,
+      </if>
+      <if test="passenger != null">
+        passenger,
+      </if>
+      <if test="stoptime != null">
+        stoptime,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="carnumber != null">
+        carnumber,
+      </if>
+      <if test="cancel != null">
+        cancel,
+      </if>
+      <if test="senderOpenid != null">
+        sender_openid,
+      </if>
+      <if test="driverOpenid != null">
+        driver_openid,
+      </if>
+      <if test="fromcity != null">
+        fromcity,
+      </if>
+      <if test="tocity != null">
+        tocity,
+      </if>
+      <if test="senderMobile != null">
+        sender_mobile,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="reqnum != null">
+        #{reqnum,jdbcType=INTEGER},
+      </if>
+      <if test="passenger != null">
+        #{passenger,jdbcType=VARCHAR},
+      </if>
+      <if test="stoptime != null">
+        #{stoptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=INTEGER},
+      </if>
+      <if test="carnumber != null">
+        #{carnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="cancel != null">
+        #{cancel,jdbcType=BIT},
+      </if>
+      <if test="senderOpenid != null">
+        #{senderOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="driverOpenid != null">
+        #{driverOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="fromcity != null">
+        #{fromcity,jdbcType=VARCHAR},
+      </if>
+      <if test="tocity != null">
+        #{tocity,jdbcType=VARCHAR},
+      </if>
+      <if test="senderMobile != null">
+        #{senderMobile,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pin.chen.dao.pojo.Pin">
+    update pin
+    <set>
+      <if test="reqnum != null">
+        reqnum = #{reqnum,jdbcType=INTEGER},
+      </if>
+      <if test="passenger != null">
+        passenger = #{passenger,jdbcType=VARCHAR},
+      </if>
+      <if test="stoptime != null">
+        stoptime = #{stoptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=INTEGER},
+      </if>
+      <if test="carnumber != null">
+        carnumber = #{carnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="cancel != null">
+        cancel = #{cancel,jdbcType=BIT},
+      </if>
+      <if test="senderOpenid != null">
+        sender_openid = #{senderOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="driverOpenid != null">
+        driver_openid = #{driverOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="fromcity != null">
+        fromcity = #{fromcity,jdbcType=VARCHAR},
+      </if>
+      <if test="tocity != null">
+        tocity = #{tocity,jdbcType=VARCHAR},
+      </if>
+      <if test="senderMobile != null">
+        sender_mobile = #{senderMobile,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where pinid = #{pinid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pin.chen.dao.pojo.Pin">
+    update pin
+    set reqnum = #{reqnum,jdbcType=INTEGER},
+      passenger = #{passenger,jdbcType=VARCHAR},
+      stoptime = #{stoptime,jdbcType=TIMESTAMP},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      price = #{price,jdbcType=INTEGER},
+      carnumber = #{carnumber,jdbcType=VARCHAR},
+      cancel = #{cancel,jdbcType=BIT},
+      sender_openid = #{senderOpenid,jdbcType=VARCHAR},
+      driver_openid = #{driverOpenid,jdbcType=VARCHAR},
+      fromcity = #{fromcity,jdbcType=VARCHAR},
+      tocity = #{tocity,jdbcType=VARCHAR},
+      sender_mobile = #{senderMobile,jdbcType=VARCHAR}
+    where pinid = #{pinid,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectPinAboutMeByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from pin where passenger like '%${_parameter}%'
+  </select>
+
+  <select id="selectAllPin" resultMap="BaseResultMap">
+        select * from pin
+  </select>
+</mapper>
