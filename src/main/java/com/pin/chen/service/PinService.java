@@ -3,17 +3,19 @@ package com.pin.chen.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.pin.chen.dao.mapper.PinDao;
+import com.pin.chen.dao.mapper.PinextDao;
 import com.pin.chen.dao.mapper.UserDao;
 import com.pin.chen.dao.pojo.Pin;
+import com.pin.chen.dao.pojo.Pinext;
 import com.pin.chen.dao.pojo.User;
 import com.pin.chen.utils.Response;
 import com.pin.chen.utils.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Component
 public class PinService {
@@ -23,6 +25,28 @@ public class PinService {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    PinextDao pinextDao;
+
+
+    /**
+     * 创建拼单的同时，创建附加的拼单信息，拓展的表数据
+     * @param pinId
+     * @param comment
+     * @param pinType
+     * @return
+     */
+    private boolean insertPinExInforMation(int pinId,String comment,Byte pinType)
+    {
+        Pinext pinext = new Pinext();
+        pinext.setPintype(pinType);
+        pinext.setComment(comment);
+        pinext.setPinid(pinId);
+        return 0!=pinextDao.insert(pinext);
+
+    }
+
 
 
     /**
@@ -38,7 +62,7 @@ public class PinService {
      * @return 返回包含与该用户有关的pin
      *
      */
-    public Response CreatePin(String sender_openid,  String sender_mobile,String reqNum, String stopTime, String fromCity, String toCity, String price)
+    public Response CreatePin(String sender_openid,  String sender_mobile,String reqNum, String stopTime, String fromCity, String toCity, String price,String pinType,String comment)
     {
         try {
             Pin createPin = new Pin();
@@ -52,7 +76,14 @@ public class PinService {
             JSONArray passengerJsonArray = new JSONArray();
             passengerJsonArray.add(sender_openid);
             createPin.setPassenger(passengerJsonArray.toJSONString());
+
+
             int insertNum = pinDao.insertSelective(createPin);
+            int createPinid = createPin.getPinid();
+            this.insertPinExInforMation(createPinid,comment,Byte.parseByte(pinType));
+
+
+
             if(insertNum==0)
                 return  new Response(Response.FAIL);
             return  new Response(Response.OK);
@@ -114,6 +145,18 @@ public class PinService {
         responseData.setPrice(pinItem.getPrice());
         responseData.setStoptime(pinItem.getStoptime().getTime()+"");
         responseData.setPinid(pinItem.getPinid());
+
+        if(userOpenId.equals(pinItem.getSenderOpenid())){
+            responseData.setOwner(true);
+        }
+
+        //从表2中找到备注
+        Pinext pinext = pinextDao.selectByPrimaryKey(pinItem.getPinid());
+        responseData.setComment(pinext.getComment());
+
+        //拼车类型
+        responseData.setPintype(pinext.getPintype());
+
         if(passengerNum>0) {
             List<String> passengerOpenIdList = JSONArray.parseArray(passengerJsonArray.toJSONString(), String.class);
             responseData.setPassenger_name(this.getUserNamesByUserOpenIdList(passengerOpenIdList));
@@ -166,6 +209,113 @@ public class PinService {
 
 
     /**
+     * 获取拼单根据拼单类型
+     * @param userOpenId 请求发起者openId
+     * @param pinType 拼单类型 0 是人找车 1是车找人
+     * @return
+     */
+    private Response selectPinsByPinType(String userOpenId,String pinType){
+
+        try{
+            List<Pin> pinList = pinDao.selectPinByPinType( Integer.parseInt(pinType) );
+
+            List<ResponseData> responseDataList = this.filterFiledFromPinLists(userOpenId,pinList);
+
+            return new Response(Response.OK,responseDataList);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Response(Response.EXCEPTION,e);
+        }
+    }
+
+    /**
+     * 根据拼单类型和用户Id获取
+     * @param userOpenId
+     * @param pinType
+     * @return
+     */
+    private Response selectPinsByPinTypeByOpenId(String userOpenId,String pinType){
+        try{
+            Map<String,String> params = new HashMap<String,String>();
+
+            List<Pin> pinList = pinDao.selectPinByPinTypeByOpenId(Integer.parseInt(pinType),userOpenId);
+
+            List<ResponseData> responseDataList = this.filterFiledFromPinLists(userOpenId,pinList);
+
+            return new Response(Response.OK,responseDataList);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Response(Response.EXCEPTION,e);
+        }
+    }
+
+
+    /**
+     * 根据用户范围、拼车类型、时间范围查询拼单
+     * @param userOpenId
+     * @param userRange 0表示所有 1表示自身的拼单
+     * @param pinType  拼单类型
+     * @param timeRange 从现在开始到下面N天
+     * @return
+     */
+    public Response selectPinsByPinTypeByOpenIdByTimeRange(String userOpenId,String userRange,String pinType,String timeRange){
+
+        try{
+
+            List<Pin> pinList = null;
+            int pinTypeInteger = Integer.parseInt(pinType);
+            int userRangeInteger = Integer.parseInt(userRange);
+            int timeRangeInteger = Integer.parseInt(timeRange);
+
+            Date curDate = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE,timeRangeInteger);
+            Date endDate = calendar.getTime();
+            //获取所有拼单 没有时间限制
+            if(userRangeInteger==0 && timeRangeInteger==0){
+                return  this.selectPinsByPinType(userOpenId,pinType);
+            }
+            //获取用户自身的拼单 没有时间限制
+            else if(userRangeInteger==1 && timeRangeInteger==0){
+                return  this.selectPinsByPinTypeByOpenId(userOpenId,pinType);
+            }
+            //获取所有拼单 有时间限制
+            else if(userRangeInteger==0 && timeRangeInteger>0){
+
+                pinList = pinDao.selectPinByPinTypeByStopTime(pinTypeInteger,curDate,endDate);
+            }
+            //获取用户自身的拼单 有时间限制
+            else if(userRangeInteger==1 && timeRangeInteger>0){
+
+                pinList = pinDao.selectPinByPinTypeByOpenIdByStopTime(pinTypeInteger,userOpenId,curDate,endDate);
+            }
+
+            List<ResponseData> responseDataList = this.filterFiledFromPinLists(userOpenId,pinList);
+
+            return new Response(Response.OK,responseDataList);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Response(Response.EXCEPTION,e);
+        }
+    }
+
+
+    public void test()
+    {
+        Date nowDate = new Date();
+        Calendar nowCal = Calendar.getInstance();
+        nowCal.add(Calendar.DATE,30);
+        Date afterDate = nowCal.getTime();
+        List<Pin> pinList=pinDao.selectPinByPinTypeByOpenIdByStopTime(1,"ommQp485CAgkqso5FTHVDD-l1iSc",nowDate,afterDate);
+
+        return ;
+    }
+
+
+    /**
      * 获取所有的拼单
      * @param userOpenId
      * @return
@@ -214,7 +364,20 @@ public class PinService {
         try
         {
             int pinId = Integer.parseInt(delPinId);
+
+            //权限判断
+            Pin delPin = (Pin)pinDao.selectByPrimaryKey(pinId);
+            if(!delPin.getSenderOpenid().equals(userOpenId)){
+                return new Response(Response.FAIL);
+            }
+
+
             int delNum=pinDao.deleteByPrimaryKey(pinId);
+            if(delNum == 0)
+                return new Response(Response.FAIL);
+
+            //再从PinExt表中删除
+            delNum=pinextDao.deleteByPrimaryKey(pinId);
             if(delNum == 0)
                 return new Response(Response.FAIL);
             return new Response(Response.OK);

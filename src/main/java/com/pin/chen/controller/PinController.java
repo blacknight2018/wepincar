@@ -32,8 +32,9 @@ public class PinController {
         String tocity = Params.get("ToCity");
         String price = Params.get("Price");
         String mobile = Params.get("Sender_Mobile");
-
-        return pinService.CreatePin(openid,mobile,reqnum,stoptime,fromcity,tocity,price).getMsgString();
+        String pinType = Params.get("PinType");
+        String comment = Params.get("Comment");
+        return pinService.CreatePin(openid,mobile,reqnum,stoptime,fromcity,tocity,price,pinType,comment).getMsgString();
     }
 
     @PostMapping("/gets")
@@ -41,7 +42,12 @@ public class PinController {
     public String GetPins(@RequestBody Map<String,String> Params,HttpSession httpSession)
     {
         String openid = (String)httpSession.getAttribute("openid");
-        return pinService.selectAllPins(openid).getMsgString();
+        String pintype = Params.get("PinType");
+        String userrange = Params.get("UserRanger");
+        String timetype = Params.get("TimeRanger");
+
+        return pinService.selectPinsByPinTypeByOpenIdByTimeRange(openid,userrange,pintype,timetype).getMsgString();
+        //return pinService.selectPinsByPinType(openid,pintype).getMsgString();
     }
 
     @PostMapping("/aboutme")

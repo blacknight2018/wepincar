@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -12,11 +14,12 @@ class ChenApplicationTests {
 
     @Test
     void contextLoads() {
-        JSONArray passengerJsonArray = new JSONArray();
-        String passengerListString = "[\"aa\",\"BB\"]";
-        passengerJsonArray = JSON.parseArray(passengerListString);
-        List<String> stringList= JSONArray.parseArray(passengerJsonArray.toJSONString(),String.class);
-        System.out.println(stringList.get(1));
+        Date nowDate = new Date();
+        Calendar nw = Calendar.getInstance();
+        nw.add(Calendar.DATE,3);
+        nowDate = nw.getTime();
+
+        return ;
     }
 
 }

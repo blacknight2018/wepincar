@@ -187,4 +187,22 @@
   <select id="selectAllPin" resultMap="BaseResultMap">
         select * from pin
   </select>
+
+  <select id="selectPinByPinType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select p.* from pinext pe inner JOIN pin p on  pe.pinid=p.pinid &amp;&amp; pe.pintype=${_parameter} ORDER BY p.createtime DESC;
+  </select>
+
+  <select id="selectPinByPinTypeByOpenId" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select p.* from pinext pe inner JOIN pin p on  pe.pinid=p.pinid &amp;&amp; pe.pintype=#{param1} &amp;&amp; p.sender_openid=#{param2} ORDER BY p.createtime DESC;
+  </select>
+
+  <select id="selectPinByPinTypeByOpenIdByStopTime" resultMap="BaseResultMap">
+    select p.* from pinext pe inner JOIN pin p on  pe.pinid=p.pinid &amp;&amp; pe.pintype=#{param1} &amp;&amp; p.sender_openid=#{param2} &amp;&amp; p.stoptime&gt;#{param3} &amp;&amp; p.stoptime&lt;#{param4}  ORDER BY p.createtime DESC;
+  </select>
+
+  <select id="selectPinByPinTypeByStopTime" resultMap="BaseResultMap">
+    select p.* from pinext pe inner JOIN pin p on  pe.pinid=p.pinid &amp;&amp; pe.pintype=#{param1} &amp;&amp; p.stoptime&gt;#{param2} &amp;&amp; p.stoptime&lt;#{param3}  ORDER BY p.createtime DESC;
+  </select>
+
+
 </mapper>

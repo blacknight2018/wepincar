@@ -4,6 +4,25 @@ import java.util.*;
 public class ResponseData {
     private Integer curnum;
     private Integer reqnum;
+    private Boolean owner;
+
+    public int getPintype() {
+        return pintype;
+    }
+
+    public void setPintype(int pintype) {
+        this.pintype = pintype;
+    }
+
+    private int pintype;
+
+    public Boolean getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Boolean owner) {
+        this.owner = owner;
+    }
 
     public Integer getPinid() {
         return pinid;
@@ -39,6 +58,16 @@ public class ResponseData {
     private String sender_openid;
     private String createtime;
     private String stoptime;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    private String comment;
 
     public Integer getCurnum() {
         return curnum;

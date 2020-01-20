@@ -8,6 +8,7 @@ import com.pin.chen.dao.mapper.UserDao;
 import com.pin.chen.dao.pojo.Pin;
 import com.pin.chen.dao.pojo.User;
 import com.pin.chen.utils.Response;
+import com.pin.chen.utils.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,22 +35,55 @@ public class UserService {
         {
             User loginUser = null;
             loginUser = (User) userDao.selectByPrimaryKey(userOpenId);
-            loginUser.setHead(userHeadUrl);
-            loginUser.setName(userNickName);
-            loginUser.setLogintime(new Date());
-            userDao.updateByPrimaryKeySelective(loginUser);
-            if(loginUser!=null)
-                return new Response(Response.OK);
+
+
+            ResponseData responseData = new ResponseData();
+            if(loginUser!=null) {
+                loginUser.setHead(userHeadUrl);
+                loginUser.setName(userNickName);
+                loginUser.setLogintime(new Date());
+                userDao.updateByPrimaryKeySelective(loginUser);
+                responseData.setType(loginUser.getType());
+                return new Response(Response.OK,responseData);
+            }
 
 
             loginUser = new User();
             loginUser.setOpenid(userOpenId);
             loginUser.setHead(userHeadUrl);
             loginUser.setName(userNickName);
-            int insertNum =userDao.insertSelective(loginUser);
+            loginUser.setType("passenger");
+            responseData.setType("passenger");
+            int insertNum =userDao.insert(loginUser);
             if(insertNum==0)
                 return new Response(Response.FAIL);
-            return new Response(Response.OK);
+            return new Response(Response.OK,responseData);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return new Response(Response.EXCEPTION,e);
+        }
+    }
+
+    public Response changeRole(String userOpenId)
+    {
+        try{
+            User changeUser=userDao.selectByPrimaryKey(userOpenId);
+            if(null==changeUser) {
+                return  new Response(Response.FAIL);
+            }
+            if(changeUser.getType().equals("driver")){
+                changeUser.setType("passenger");
+            }else
+            {
+                changeUser.setType("driver");
+            }
+            int updateNum=userDao.updateByPrimaryKeySelective(changeUser);
+            if(updateNum==0)
+                return  new Response(Response.FAIL);
+            return  new Response(Response.OK);
+
         }
         catch(Exception e)
         {

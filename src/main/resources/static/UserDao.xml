@@ -24,10 +24,10 @@
     where openid = #{openid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" keyColumn="openid" keyProperty="openid" parameterType="com.pin.chen.dao.pojo.User" useGeneratedKeys="true">
-    insert into user (`type`, `name`, carnumber, 
+    insert into user (`openid`,`type`, `name`, carnumber,
       logintime, cantuse, head
       )
-    values (#{type,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{carnumber,jdbcType=VARCHAR}, 
+    values (#{openid,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{carnumber,jdbcType=VARCHAR},
       #{logintime,jdbcType=TIMESTAMP}, #{cantuse,jdbcType=TINYINT}, #{head,jdbcType=VARCHAR}
       )
   </insert>
