@@ -18,6 +18,9 @@ public class ChenApplication extends SpringBootServletInitializer {
         return application.sources(ChenApplication.class);
     }
     public static void main(String[] args) {
+
+
+
         SpringApplication.run(ChenApplication.class, args);
     }
 

@@ -1,10 +1,9 @@
 server:
   port: 443
   ssl:
-    key-store: classpath:www.learnforever.cn.jks
-    key-password: j866661876nrj
+    key-store: src\main\resources\api.upspeed.cn.jks
+    key-password: 123456
     key-store-type: JKS
-    key-alias: alias
 
 
 spring:
