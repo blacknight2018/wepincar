@@ -1,7 +1,7 @@
 server:
   port: 443
   ssl:
-    key-store: src\main\resources\api.upspeed.cn.jks
+    key-store: src\main\resources\star.scery.com.jks
     key-password: 123456
     key-store-type: JKS
 
