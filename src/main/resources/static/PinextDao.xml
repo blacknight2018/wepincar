@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pin.chen.dao.mapper.PinextDao">
+  <resultMap id="BaseResultMap" type="com.pin.chen.dao.pojo.Pinext">
+    <id column="pinid" jdbcType="INTEGER" property="pinid" />
+    <result column="pintype" jdbcType="TINYINT" property="pintype" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="carblank" jdbcType="INTEGER" property="carblank" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pinid, pintype, `comment`, carblank
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pinext
+    where pinid = #{pinid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from pinext
+    where pinid = #{pinid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="pinid" keyProperty="pinid" parameterType="com.pin.chen.dao.pojo.Pinext" useGeneratedKeys="true">
+    insert into pinext (`pinid`,pintype, `comment`, carblank
+      )
+    values (#{pinid,jdbcType=INTEGER},#{pintype,jdbcType=TINYINT}, #{comment,jdbcType=VARCHAR}, #{carblank,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="pinid" keyProperty="pinid" parameterType="com.pin.chen.dao.pojo.Pinext" useGeneratedKeys="true">
+    insert into pinext
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pintype != null">
+        pintype,
+      </if>
+      <if test="comment != null">
+        `comment`,
+      </if>
+      <if test="carblank != null">
+        carblank,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pintype != null">
+        #{pintype,jdbcType=TINYINT},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="carblank != null">
+        #{carblank,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pin.chen.dao.pojo.Pinext">
+    update pinext
+    <set>
+      <if test="pintype != null">
+        pintype = #{pintype,jdbcType=TINYINT},
+      </if>
+      <if test="comment != null">
+        `comment` = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="carblank != null">
+        carblank = #{carblank,jdbcType=INTEGER},
+      </if>
+    </set>
+    where pinid = #{pinid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pin.chen.dao.pojo.Pinext">
+    update pinext
+    set pintype = #{pintype,jdbcType=TINYINT},
+      `comment` = #{comment,jdbcType=VARCHAR},
+      carblank = #{carblank,jdbcType=INTEGER}
+    where pinid = #{pinid,jdbcType=INTEGER}
+  </update>
+</mapper>

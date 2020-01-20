@@ -1,5 +1,11 @@
 server:
-  port: 8080
+  port: 443
+  ssl:
+    key-store: classpath:www.learnforever.cn.jks
+    key-password: j866661876nrj
+    key-store-type: JKS
+    key-alias: alias
+
 
 spring:
   #数据库连接配置
