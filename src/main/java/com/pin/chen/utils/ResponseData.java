@@ -1,10 +1,22 @@
 package com.pin.chen.utils;
 
+import com.pin.chen.dao.pojo.News;
+
 import java.util.*;
 public class ResponseData {
     private Integer curnum;
     private Integer reqnum;
     private Boolean owner;
+
+    private List<News> newsList;
+
+    public List<News> getNewsList() {
+        return newsList;
+    }
+
+    public void setNewsList(List<News> newsList) {
+        this.newsList = newsList;
+    }
 
     public boolean isStartswitch() {
         return startswitch;

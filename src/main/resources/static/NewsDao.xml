@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pin.chen.dao.mapper.NewsDao">
+  <resultMap id="BaseResultMap" type="com.pin.chen.dao.pojo.News">
+    <id column="newid" jdbcType="INTEGER" property="newid" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="text" jdbcType="VARCHAR" property="text" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    newid, title, `text`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from news
+    where newid = #{newid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from news
+    where newid = #{newid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="newid" keyProperty="newid" parameterType="com.pin.chen.dao.pojo.News" useGeneratedKeys="true">
+    insert into news (title, `text`)
+    values (#{title,jdbcType=VARCHAR}, #{text,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="newid" keyProperty="newid" parameterType="com.pin.chen.dao.pojo.News" useGeneratedKeys="true">
+    insert into news
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        title,
+      </if>
+      <if test="text != null">
+        `text`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        #{text,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pin.chen.dao.pojo.News">
+    update news
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        `text` = #{text,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where newid = #{newid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pin.chen.dao.pojo.News">
+    update news
+    set title = #{title,jdbcType=VARCHAR},
+      `text` = #{text,jdbcType=VARCHAR}
+    where newid = #{newid,jdbcType=INTEGER}
+  </update>
+
+  <select id="select" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from news
+  </select>
+
+</mapper>
