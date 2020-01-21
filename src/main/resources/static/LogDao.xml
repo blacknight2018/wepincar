@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pin.chen.dao.mapper.LogDao">
+  <resultMap id="BaseResultMap" type="com.pin.chen.dao.pojo.Log">
+    <id column="logid" jdbcType="INTEGER" property="logid" />
+    <result column="operate" jdbcType="VARCHAR" property="operate" />
+    <result column="param1" jdbcType="VARCHAR" property="param1" />
+    <result column="param2" jdbcType="VARCHAR" property="param2" />
+    <result column="param3" jdbcType="VARCHAR" property="param3" />
+    <result column="param4" jdbcType="VARCHAR" property="param4" />
+    <result column="param5" jdbcType="VARCHAR" property="param5" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    logid, operate, param1, param2, param3, param4, param5, createtime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from log
+    where logid = #{logid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from log
+    where logid = #{logid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="logid" keyProperty="logid" parameterType="com.pin.chen.dao.pojo.Log" useGeneratedKeys="true">
+    insert into log (operate, param1, param2, 
+      param3, param4, param5, 
+      createtime)
+    values (#{operate,jdbcType=VARCHAR}, #{param1,jdbcType=VARCHAR}, #{param2,jdbcType=VARCHAR}, 
+      #{param3,jdbcType=VARCHAR}, #{param4,jdbcType=VARCHAR}, #{param5,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="logid" keyProperty="logid" parameterType="com.pin.chen.dao.pojo.Log" useGeneratedKeys="true">
+    insert into log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="operate != null">
+        operate,
+      </if>
+      <if test="param1 != null">
+        param1,
+      </if>
+      <if test="param2 != null">
+        param2,
+      </if>
+      <if test="param3 != null">
+        param3,
+      </if>
+      <if test="param4 != null">
+        param4,
+      </if>
+      <if test="param5 != null">
+        param5,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="operate != null">
+        #{operate,jdbcType=VARCHAR},
+      </if>
+      <if test="param1 != null">
+        #{param1,jdbcType=VARCHAR},
+      </if>
+      <if test="param2 != null">
+        #{param2,jdbcType=VARCHAR},
+      </if>
+      <if test="param3 != null">
+        #{param3,jdbcType=VARCHAR},
+      </if>
+      <if test="param4 != null">
+        #{param4,jdbcType=VARCHAR},
+      </if>
+      <if test="param5 != null">
+        #{param5,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pin.chen.dao.pojo.Log">
+    update log
+    <set>
+      <if test="operate != null">
+        operate = #{operate,jdbcType=VARCHAR},
+      </if>
+      <if test="param1 != null">
+        param1 = #{param1,jdbcType=VARCHAR},
+      </if>
+      <if test="param2 != null">
+        param2 = #{param2,jdbcType=VARCHAR},
+      </if>
+      <if test="param3 != null">
+        param3 = #{param3,jdbcType=VARCHAR},
+      </if>
+      <if test="param4 != null">
+        param4 = #{param4,jdbcType=VARCHAR},
+      </if>
+      <if test="param5 != null">
+        param5 = #{param5,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where logid = #{logid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pin.chen.dao.pojo.Log">
+    update log
+    set operate = #{operate,jdbcType=VARCHAR},
+      param1 = #{param1,jdbcType=VARCHAR},
+      param2 = #{param2,jdbcType=VARCHAR},
+      param3 = #{param3,jdbcType=VARCHAR},
+      param4 = #{param4,jdbcType=VARCHAR},
+      param5 = #{param5,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where logid = #{logid,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectLogByOpenIdByOperate" resultMap="BaseResultMap">
+    select * from log where operate =#{param1,jdbcType=VARCHAR} &amp;&amp; param1=#{param2,jdbcType=VARCHAR} &amp;&amp; TO_DAYS(createtime) = TO_DAYS(NOW())
+  </select>
+
+</mapper>
