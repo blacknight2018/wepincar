@@ -6,6 +6,15 @@ public class ResponseData {
     private Integer reqnum;
     private Boolean owner;
 
+    public boolean isStartswitch() {
+        return startswitch;
+    }
+
+    public void setStartswitch(boolean startswitch) {
+        this.startswitch = startswitch;
+    }
+
+    private boolean startswitch;
     public int getPintype() {
         return pintype;
     }

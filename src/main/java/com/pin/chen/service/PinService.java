@@ -83,10 +83,12 @@ public class PinService {
             this.insertPinExInforMation(createPinid,comment,Byte.parseByte(pinType));
 
 
+            ResponseData responseData = new ResponseData();
+            responseData.setPinid(createPinid);
 
             if(insertNum==0)
                 return  new Response(Response.FAIL);
-            return  new Response(Response.OK);
+            return  new Response(Response.OK,responseData);
 
 
         }

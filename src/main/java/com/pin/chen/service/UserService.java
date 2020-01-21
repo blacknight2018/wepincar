@@ -38,6 +38,7 @@ public class UserService {
 
 
             ResponseData responseData = new ResponseData();
+            responseData.setStartswitch(false);
             if(loginUser!=null) {
                 loginUser.setHead(userHeadUrl);
                 loginUser.setName(userNickName);
@@ -57,6 +58,8 @@ public class UserService {
             int insertNum =userDao.insert(loginUser);
             if(insertNum==0)
                 return new Response(Response.FAIL);
+
+
             return new Response(Response.OK,responseData);
         }
         catch(Exception e)

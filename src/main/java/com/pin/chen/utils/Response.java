@@ -13,6 +13,7 @@ public class Response {
     public static final int NOTLOGIN = 5;
     public static final int PARAMERROR = 6;
     public static final int NOTREGISTER = 7;
+    public static final int NOWALLOWDCREATE = 8;
 
 
     private String MsgString;
@@ -75,6 +76,9 @@ public class Response {
                 break;
             case NOTREGISTER:
                 MsgString = "NOR REGISTER";
+                break;
+            case NOWALLOWDCREATE:
+                MsgString = "一天只能发3次";
                 break;
         }
 
