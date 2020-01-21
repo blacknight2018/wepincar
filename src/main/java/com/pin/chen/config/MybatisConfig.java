@@ -28,7 +28,7 @@ public class MybatisConfig {
 
         System.out.println("dataSource");
         DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setUrl("jdbc:mysql://39.107.93.78:3306/pinche2?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai");
+        dataSource.setUrl("jdbc:mysql://111.230.137.194:3306/pinche2?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai");
         //System.out.println(dataSourceProperties.getUrl());
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUsername("root");

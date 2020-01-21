@@ -38,7 +38,7 @@ public class UserService {
 
 
             ResponseData responseData = new ResponseData();
-            responseData.setStartswitch(true);
+            responseData.setStartswitch(false);
             if(loginUser!=null) {
                 loginUser.setHead(userHeadUrl);
                 loginUser.setName(userNickName);
